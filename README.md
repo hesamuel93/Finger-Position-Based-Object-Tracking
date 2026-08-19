@@ -9,16 +9,16 @@ The object tracking does not use an AI model and instead uses the CRST algorithm
 The CRST tracking box continuously updates until the object is no longer seen in the frame.
 
 ## Dependencies
-Google Mediapipe Hand Landmarker Model: https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker#models
+Google Mediapipe Hand Landmarker Model: https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker#models <br>
 OpenCV and Python 3.9+
 
 ## How To Run
-Place the Google Mediapipe Hand Landmarker Model (.task file) into the same folder as the Python script.
-When you run the script, the webcam will automatically open, allowing you to view the video.
-Press "Q" to close the webcam and script.
+Place the Google Mediapipe Hand Landmarker Model (.task file) into the same folder as the Python script. <br>
+When you run the script, the webcam will automatically open, allowing you to view the video. <br>
+Press "Q" to close the webcam and script. <br>
 Point your index finger at an object in view of the camera, and press "C." If successful, a green bounding box should appear at the pointed object, and the bounding box should be tracking until the object is no longer in view of the camera. An image will also be saved into the folder as "hand_landmarks.jpg", and the image shows you your finger landmarks, direction vector of the pointer finger, and initial bounding box.
 
 ## Potential Updates/Improvements for the future:
-Bounding box could reappear if an object that was lost reappears in the frame
-Continuous tracking around a finger by putting the Hand Landmarker model in VIDEO mode, however this may drop framerate
-Different kinds of object tracking based on different finger gestures
+Bounding box could reappear if an object that was lost reappears in the frame <br>
+Continuous tracking around a finger by putting the Hand Landmarker model in VIDEO mode, however this may drop framerate <br>
+Different kinds of object tracking based on different finger gestures <br>
