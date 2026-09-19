@@ -17,7 +17,8 @@ OpenCV and Python 3.9+
 - When you run the script, the webcam will automatically open, allowing you to view the video.
 - Press "Q" to close the webcam and script.
 - Point your index finger at an object in view of the camera, and press "C." If successful, a green bounding box should appear at the pointed object, and the bounding box should be tracking until the object is no longer in view of the camera. An image will also be saved into the folder as "hand_landmarks.jpg", and the image shows you your finger landmarks, direction vector of the pointer finger, and initial bounding box.
-- Press "Z" to zoom into the bounding box with the selected object, and press "Z" again to zoom out.
+- Press "Z" to zoom into the bounding box with the selected object, and press "Z" again to zoom out. The screen will hover around the object that is currently being tracked. If the object disappears from the screen, it will automatically zoom out.
+- Press "F" to zoom into the bounding box and press "F" again to zoom out. The screen will not continue to track the object, as it is zoomed in a fixed state.
 
 ## Potential Updates/Improvements for the future:
 - Bounding box could reappear if an object that was lost reappears in the frame.
