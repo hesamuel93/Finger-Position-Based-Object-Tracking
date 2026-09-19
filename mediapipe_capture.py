@@ -19,6 +19,9 @@ options = HandLandmarkerOptions(
 
 landmarker = HandLandmarker.create_from_options(options)
 
+bbox_zoomed = True
+
+# Returns an area where the finger is pointing
 def detect_pointer(frame):
     h, w, _ = frame.shape
     bbox_width = int(w / 4)
@@ -138,6 +141,7 @@ def detect_pointer(frame):
     cv2.imwrite('hand_landmarks.jpg', frame)
     return frame, bbox
 
+# Crops and resizes the frame based on the bbox
 def zoom(frame, bbox):
     if bbox is None:
         print("No object to zoom into.")
@@ -145,8 +149,10 @@ def zoom(frame, bbox):
     else:
         og_height, og_width, _ = frame.shape
         x, y, w, h = [int(v) for v in bbox]
-        if w <= 0 or h <= 0:
+        if w <= 0 or h <= 0 or x <= 0 or y <= 0:
             print("Bounding box has unstable dimensions")
+            global bbox_zoomed
+            bbox_zoomed = False
             return frame
         cropped_frame = frame[y : y + h, x : x + w]
         frame = cv2.resize(cropped_frame, (og_width, og_height))
@@ -160,13 +166,16 @@ def main():
     tracking_mode = False
 
     zoom_mode = False
+    fixed_zoom_mode = False
+    fixed_zoom_bbox = None
+    global bbox_zoomed
 
     while capture.isOpened():
         _, frame = capture.read()
         frame = cv2.flip(frame, 1)
         key = cv2.waitKey(1) & 0xFF
 
-        if tracking_mode:
+        if tracking_mode and not fixed_zoom_mode:
             success, bbox = tracker.update(frame)
             if success:
                 x, y, w, h = [int(v) for v in bbox]
@@ -194,8 +203,15 @@ def main():
                 # Tracker lost object
                 tracking_mode = False
 
-            if zoom_mode:
+            if bbox_zoomed is False:
+                zoom_mode = False
+                fixed_zoom_mode = False
+
+            if zoom_mode and bbox_zoomed:
                 frame = zoom(frame, bbox)
+
+        if fixed_zoom_mode and bbox_zoomed:
+            frame = zoom(frame, fixed_zoom_bbox)
 
         if key == ord('q'):
             tracking_mode = False
@@ -212,8 +228,15 @@ def main():
                     tracker = cv2.TrackerCSRT_create()
                 tracker.init(frame, bbox)
 
-        if key == ord('z'):
+        if key == ord('z') and not fixed_zoom_mode:
             zoom_mode = not zoom_mode
+            bbox_zoomed = True
+
+        if key == ord('f') and not zoom_mode:
+            fixed_zoom_mode = not fixed_zoom_mode
+            fixed_zoom_bbox = bbox
+            bbox_zoomed = True
+
 
         cv2.imshow('Webcam Feed', frame)
 
